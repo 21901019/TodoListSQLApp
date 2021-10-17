@@ -1,6 +1,7 @@
 package com.todo.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class TodoItem {
@@ -10,8 +11,11 @@ public class TodoItem {
     private String category;
     private String due_date;
     private int id;
+    private String place;
+    private String people;
+    private int is_completed;
  
-	public TodoItem(String title, String desc, String category, String due_date) {
+	public TodoItem(String title, String desc, String category, String due_date, String people, String place, int is_completed) {
 		super();
 		this.title = title;
 		this.desc = desc;
@@ -19,8 +23,11 @@ public class TodoItem {
         this.current_date= f.format(new Date());
 		this.category = category;
 		this.due_date = due_date;
+		this.people = people;
+		this.place = place;
+		this.is_completed = is_completed;
 	}
-	public TodoItem(String title, String desc, String category, String due_date, String current_date) {
+	public TodoItem(String title, String desc, String category, String due_date, String current_date, String people, String place, int is_completed) {
 		super();
 		this.title = title;
 		this.desc = desc;
@@ -28,8 +35,12 @@ public class TodoItem {
         this.current_date= f.format(new Date());
 		this.category = category;
 		this.due_date = due_date;
+		this.people = people;
+		this.place = place;
+		this.is_completed = is_completed;
 	}
 
+	
 	/*public TodoItem(String title, String desc){
         this.title=title;
         this.desc=desc;
@@ -42,7 +53,13 @@ public class TodoItem {
         this.current_date= current_date;
     }*/
     
-    public String getTitle() {
+    public int getIs_completed() {
+		return is_completed;
+	}
+	public void setIs_completed(int is_completed) {
+		this.is_completed = is_completed;
+	}
+	public String getTitle() {
         return title;
     }
 
@@ -79,12 +96,17 @@ public class TodoItem {
     }
     
     public String toSaveString() {
-    	return category + "##" + title + "##" + desc + "##" + due_date + "##" + current_date + "\n";
+    	return category + "##" + is_completed + "##" + title + "##" + desc + "##" + due_date + "##" + people +"##" + place +"##" + current_date + "\n";
     }
     
     @Override
 	public String toString() {
-		return id+" ["+category+"] " + title + " - " + desc + " - "+ due_date + " - "+current_date;
+    	if(is_completed == 1) {
+    		return id+" ["+category+"] [V]" + title + " - " + desc + " - "+ due_date + " - "+ people + " - "+ place + " - "+current_date;
+    	}
+    	else {
+    		return id+" ["+category+"]" + title + " - " + desc + " - "+ due_date + " - "+ people + " - "+ place + " - "+current_date;
+    	}
 	}
 	public void setId(int id) {
 		this.id = id;
@@ -92,6 +114,18 @@ public class TodoItem {
 	}
 	public int getId() {
 		return id;
+	}
+	public String getPlace() {
+		return place;
+	}
+	public void setPlace(String place) {
+		this.place = place;
+	}
+	public String getPeople() {
+		return people;
+	}
+	public void setPeople(String people) {
+		this.people = people;
 	}
 
 }

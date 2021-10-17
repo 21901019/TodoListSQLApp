@@ -11,7 +11,8 @@ public class TodoUtil {
 	
 	public static void createItem(TodoList l) {
 		
-		String title, desc, category, due_date;
+		String title, desc, category, due_date, place, people;
+		int is_completed;
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("[항목추가]\n"+ "제목 > ");
@@ -28,10 +29,19 @@ public class TodoUtil {
 		System.out.print("내용 > ");
 		desc = sc.nextLine().trim();
 		
-		System.out.print("마감일자 > ");
+		System.out.print("사람 > ");
+		people = sc.nextLine().trim();
+		
+		System.out.print("장소 > ");
+		place = sc.nextLine().trim();
+		
+		System.out.print("완료 여부(yes = 1, no = 0) > ");
+		is_completed = sc.nextInt();
+		
+		System.out.print("마감일자(요일을 적으시면 알람이 올라옵니다)ex:월 > ");
 		due_date = sc.next();
 
-		TodoItem t = new TodoItem(title, desc, category, due_date);
+		TodoItem t = new TodoItem(title, desc, category, due_date, people, place, is_completed);
 		if(l.addItem(t) > 0) {
 			System.out.println("추가되었습니다.");
 		}
@@ -49,7 +59,8 @@ public class TodoUtil {
 
 	public static void updateItem(TodoList l) {
 		
-		String new_title, new_desc, new_category, new_due_date;
+		String new_title, new_desc, new_category, new_due_date, people, place;
+		int is_completed;
 		Scanner sc = new Scanner(System.in);
 		
 		System.out.print("[항목 수정]\n"+ "수정할 항목의 번호를 입력하시오 > ");
@@ -63,10 +74,17 @@ public class TodoUtil {
 		sc.nextLine();
 		System.out.print("새 내용 > ");
 		new_desc = sc.nextLine().trim();
-		System.out.print("새 마감일자 > ");
+		System.out.print("사람 > ");
+		people = sc.nextLine().trim();
+		System.out.print("장소 > ");
+		place = sc.nextLine().trim();
+		System.out.print("완료 여부(yes = 1, no = 0) > ");
+		is_completed = sc.nextInt();
+		sc.nextLine();
+		System.out.print("새 마감일자(요일을 적으시면 알람이 올라옵니다)ex:월 > ");
 		new_due_date = sc.nextLine().trim();
 		
-		TodoItem t = new TodoItem(new_title, new_desc, new_category, new_due_date);
+		TodoItem t = new TodoItem(new_title, new_desc, new_category, new_due_date, people, place, is_completed);
 		t.setId(num);
 		if(l.updateItem(t) > 0)
 			System.out.println("수정되었습니다.");
@@ -141,11 +159,14 @@ public class TodoUtil {
 				while((fr = br.readLine())!= null){
 					StringTokenizer st = new StringTokenizer(fr, "##");
 					String category = st.nextToken();
+					int is_completed = Integer.parseInt(st.nextToken());
 					String title = st.nextToken();
 					String desc = st.nextToken();
+					String people = st.nextToken();
+					String place = st.nextToken();
 					String due_date = st.nextToken();
 					String current_date = st.nextToken();
-					TodoItem t = new TodoItem(title, desc, category, due_date, current_date);
+					TodoItem t = new TodoItem(title, desc, category, due_date, current_date, people, place, is_completed);
 					l.addItem(t);
 					i += 1;	
 				}
@@ -172,6 +193,49 @@ public class TodoUtil {
 		for (TodoItem item : l.getOrderedList(orderby, ordering)) {
 			System.out.println(item.toString());
 		}
+	}
+
+	public static void checkday(TodoList l) {
+		int k = 0;
+		Calendar cal = Calendar.getInstance();
+		int dayofweek = cal.get(Calendar.DAY_OF_WEEK);
+		String week = "";
+		if(dayofweek == 1) {
+			week = "일";
+		}
+		else if(dayofweek == 2) {
+			week = "월";
+		}
+		else if(dayofweek == 3) {
+			week = "화";
+		}
+		else if(dayofweek == 4) {
+			week = "수";
+		}
+		else if(dayofweek == 5) {
+			week = "목";
+		}
+		else if(dayofweek == 6) {
+			week = "금";
+		}
+		else if(dayofweek == 7) {
+			week = "토";
+		}
+		
+		System.out.print("반복되는 일정 중 오늘 해야하는 일은 ");
+		for (TodoItem item : l.getList()) {
+			if(week.equals(item.getDue_date())) {
+				System.out.print("\n"+item.toString());
+				k+=1;
+			}
+		}
+		if(k == 0) {
+			System.out.println("없습니다.");
+		}
+		else {
+			System.out.println("\n이 있습니다.");
+		}
+		
 	}
 
 }

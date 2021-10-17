@@ -1,6 +1,7 @@
 package com.todo;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.Scanner;
 
 import com.todo.dao.TodoList;
@@ -13,7 +14,8 @@ public class TodoMain {
 	
 		Scanner sc = new Scanner(System.in);
 		TodoList l = new TodoList();
-//		l.importData("todolist.txt");
+		TodoUtil.checkday(l);
+		l.importData("todolist.txt");
 		boolean isList = false;
 		boolean quit = false;
 //		TodoUtil.loadList(l, "todolist.txt");
